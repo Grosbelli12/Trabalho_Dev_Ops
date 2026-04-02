@@ -43,3 +43,27 @@ input {
 input::placeholder {
   color: #484f58;
 }
+
+h3 {
+  font-size: 4rem;
+  color: #3fb950;
+  margin: 20px 0;
+  font-family: 'Courier New', Courier, monospace;
+  background: #161b22;
+  padding: 10px 40px;
+  border-radius: 12px;
+  border: 2px dashed #30363d;
+}
+
+button {
+  background-color: #238636;
+  color: #ffffff;
+  border: 1px solid rgba(240, 246, 252, 0.1);
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
