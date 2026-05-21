@@ -2,12 +2,12 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-  // Microserviço - logs - pipeline - tracing - monitoramento verificador de saude que vou adicionar o meu projeto no uptime robot
 
   const [numAleatorio, setNumAleatorio] = useState(0);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(100);
-  const apiKey = import.meta.env.VITE_UPTIME_API_KEY; // Substitua pela sua chave de API do Uptime Robot
+  const apiKey = import.meta.env.VITE_UPTIME_API_KEY; 
+  
   const mudanca1 = (e) => {
     const valor1 = e.target.value;
     const apenasNumeros = valor1.replace(/[^0-9]/g, "");
@@ -32,24 +32,31 @@ function App() {
               "Content-Type": "application/x-www-form-urlencoded",
             },
             body: `api_key=${apiKey}&format=json`,
-          },
+          }
         );
 
         const dados = await resposta.json();
-
-        if (dados.monitors[0].status === 2) {
-          setStatusSite("🟢 Online");
+        if (dados.monitors && dados.monitors.length > 0) {
+          if (dados.monitors[0].status === 2) {
+            setStatusSite("🟢 Online");
+          } else {
+            setStatusSite("🔴 Offline/Com problemas");
+          }
         } else {
-          setStatusSite("🔴 Offline/Com problemas");
+          setStatusSite("Monitor não encontrado");
         }
       } catch (erro) {
         console.error("Erro ao buscar logs do Uptime Robot:", erro);
         setStatusSite("Erro na verificação");
       }
     };
-git pull origin dev
-    checarUptime();
-  }, []);
+    
+    if (apiKey) {
+      checarUptime();
+    } else {
+      setStatusSite("Chave de API não configurada");
+    }
+  }, [apiKey]);
 
   return (
     <>
@@ -72,13 +79,19 @@ git pull origin dev
       <button onClick={random}>Gerar número aleatório</button>
 
       <h2>Status do Sistema</h2>
+      
+  
+      <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+        Status da API: {statusSite}
+      </p>
       <iframe
         src="https://stats.uptimerobot.com/jLbYXZ3fCE"
         width="100%"
         height="400px"
-        style={{ border: "none", borderRadius: "8px" }}
+        style={{ border: "none", borderRadius: "8px", marginTop: "20px" }}
       />
     </>
   );
 }
 
+export default App;
