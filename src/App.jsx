@@ -82,4 +82,3 @@ git pull origin dev
   );
 }
 
-export default App;
