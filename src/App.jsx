@@ -47,7 +47,7 @@ function App() {
         setStatusSite("Erro na verificação");
       }
     };
-
+git pull origin dev
     checarUptime();
   }, []);
 

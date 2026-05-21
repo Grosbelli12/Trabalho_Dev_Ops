@@ -1,27 +1,23 @@
-name : Projeto DevOps 
+name: Projeto DevOps 
 
-on :
-    push :
-        branches : 
-            - master
+on:
+  push:
+    branches: 
+      - master
     
-jobs :
-    build :
-        runs-on : ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
     
-        steps : 
-            - name : Checkout code 
-              uses : actions/checkout@v2
+    steps: 
+      - name: Checkout code 
+        uses: actions/checkout@v2
 
-            - name : Verificar se o arquivo App.jsx existe 
-              run:  test -f src/App.jsx 
+      - name: Verificar se o arquivo App.jsx existe 
+        run: test -f src/App.jsx 
 
-            - name : faz a intalação do node modules
-              run : npm install 
+      - name: faz a instalacao do node modulesgit 
+        run: npm install 
 
-            - name : testar Build do projeto 
-              run : npm run build
-
-
-
-        
+      - name: testar Build do projeto 
+        run: npm run build
