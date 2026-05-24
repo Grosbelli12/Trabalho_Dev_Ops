@@ -3,7 +3,11 @@ name: Projeto DevOps
 on:
   push:
     branches: 
-      - dev 
+      - dev
+  pull_request:
+    branches:
+      - test
+      - master
 
 jobs:
   build:

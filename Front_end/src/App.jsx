@@ -24,39 +24,55 @@ function App() {
     setNum2(Number(apenasNumeros));
   };
 
+  // ✅ CORREÇÃO: Função declarada no escopo principal do componente!
+  const limparHistorico = () => {
+    setHistorico([]);
+    logger.info("Histórico de sorteios limpo pelo usuário.");
+  };
+
   const random = async () => {
-  try {
-    // Geramos um ID único no front para passar para o microsserviço acompanhar
-    const correlationId = crypto.randomUUID();
+    try {
+      // Geramos um ID único no front para passar para o microsserviço acompanhar
+      const correlationId = crypto.randomUUID();
 
-    logger.info(`Disparando requisicao HTTP para o microsservico. ID: ${correlationId}`);
+      logger.info(
+        `Disparando requisicao HTTP para o microsservico. ID: ${correlationId}`,
+      );
 
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/sortear?min=${num1}&max=${num2}`, {      headers: {
-        'x-correlation-id': correlationId 
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/sortear?min=${num1}&max=${num2}`,
+        {
+          headers: {
+            "x-correlation-id": correlationId,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro na resposta do microsserviço");
       }
-    });
 
-    if (!response.ok) {
-      throw new Error("Erro na resposta do microsserviço");
+      const dados = (await response.ok) ? await response.json() : [];
+
+      setNumAleatorio(dados.numero);
+      setHistorico((historicoAntigo) => [dados.numero, ...historicoAntigo]);
+
+      logger.info(`Resposta recebida do microsservico com sucesso.`);
+    } catch (error) {
+      logger.error("Falha ao conectar com o microsservico de sorteio.", error);
+      alert("Não foi possível conectar ao servidor de sorteio.");
     }
-
-    const dados = await response.json();
-
-    setNumAleatorio(dados.numero);
-    setHistorico((historicoAntigo) => [dados.numero, ...historicoAntigo]);
-    
-    logger.info(`Resposta recebida do microsservico com sucesso.`);
-
-  } catch (error) {
-    logger.error("Falha ao conectar com o microsservico de sorteio.", error);
-    alert("Não foi possível conectar ao servidor de sorteio.");
-  }
-};
+  };
 
   return (
     <div className="layout-container">
       <aside className="sidebar-historico">
         <h2>Histórico</h2>
+        {historico.length > 0 && (
+          <button onClick={limparHistorico} className="btn-limpar">
+            Limpar Histórico
+          </button>
+        )}
         {historico.length === 0 ? (
           <p className="vazio-text">Nenhum número sorteado ainda.</p>
         ) : (
@@ -72,7 +88,10 @@ function App() {
       <main className="conteudo-principal">
         <h1>Gerador de número aleatório</h1>
         <h2>Selecione o intervalo que deseja gerar o número aleatório</h2>
-
+        <p className="instrucao-text">
+          💡 Caso deixe os campos vazios, o sorteio será feito entre{" "}
+          <strong>0 e 100</strong> por padrão.
+        </p>
         <div className="inputs-group">
           <input
             type="text"
