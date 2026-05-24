@@ -3,21 +3,30 @@ name: Projeto DevOps
 on:
   push:
     branches: 
-      - master
-    
+      - dev 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     
     steps: 
       - name: Checkout code 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3 
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: Verificar se o arquivo App.jsx existe 
-        run: test -f src/App.jsx 
+        run: test -f Front_end/src/App.jsx 
 
-      - name: faz a instalacao do node modulesgit 
-        run: npm install 
+      - name: Instalar dependências do Front-end
+        run: |
+          cd Front_end
+          npm install
 
-      - name: testar Build do projeto 
-        run: npm run build
+      - name: Testar Build do projeto Front-end
+        run: |
+          cd Front_end
+          npm run build

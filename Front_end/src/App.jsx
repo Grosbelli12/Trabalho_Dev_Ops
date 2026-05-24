@@ -31,8 +31,7 @@ function App() {
 
     logger.info(`Disparando requisicao HTTP para o microsservico. ID: ${correlationId}`);
 
-    const response = await fetch(`http://localhost:3001/api/sortear?min=${num1}&max=${num2}`, {
-      headers: {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/sortear?min=${num1}&max=${num2}`, {      headers: {
         'x-correlation-id': correlationId 
       }
     });
