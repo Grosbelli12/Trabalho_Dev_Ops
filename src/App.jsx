@@ -2,12 +2,11 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-
   const [numAleatorio, setNumAleatorio] = useState(0);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(100);
-  const apiKey = import.meta.env.VITE_UPTIME_API_KEY; 
-  
+  const apiKey = import.meta.env.VITE_UPTIME_API_KEY;
+
   const mudanca1 = (e) => {
     const valor1 = e.target.value;
     const apenasNumeros = valor1.replace(/[^0-9]/g, "");
@@ -32,7 +31,7 @@ function App() {
               "Content-Type": "application/x-www-form-urlencoded",
             },
             body: `api_key=${apiKey}&format=json`,
-          }
+          },
         );
 
         const dados = await resposta.json();
@@ -50,7 +49,7 @@ function App() {
         setStatusSite("Erro na verificação");
       }
     };
-    
+
     if (apiKey) {
       checarUptime();
     } else {
@@ -79,17 +78,22 @@ function App() {
       <button onClick={random}>Gerar número aleatório</button>
 
       <h2>Status do Sistema</h2>
-      
-  
-      <p style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-        Status da API: {statusSite}
+
+      <p className="status-text">
+        Nosso sistema é monitorado em tempo real. Clique no botão abaixo para
+        ver o histórico completo de disponibilidade:
       </p>
-      <iframe
-        src="https://stats.uptimerobot.com/jLbYXZ3fCE"
-        width="100%"
-        height="400px"
-        style={{ border: "none", borderRadius: "8px", marginTop: "20px" }}
-      />
+
+      <div className="status-container">
+        <a
+          href="https://stats.uptimerobot.com/jLbYXZ3fCE"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="status-btn"
+        >
+          Acessar Painel de Monitoramento 🔗
+        </a>
+      </div>
     </>
   );
 }
